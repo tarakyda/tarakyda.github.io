@@ -1,1 +1,58 @@
-green
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зеленый Петух</title>
+    <style>
+        /* Все стили из предыдущего примера остаются без изменений */
+    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- Весь HTML из предыдущего примера остается без изменений -->
+    
+    <script>
+        const tg = window.Telegram.WebApp;
+        
+        // Инициализация
+        tg.expand();
+        tg.MainButton.setText("Главное меню").show().onClick(() => showPage('home'));
+        
+        // Функция отправки данных в бота
+        async function submitForm(event) {
+            event.preventDefault();
+            
+            // Показать индикатор загрузки
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.querySelector('#participationForm .submit-btn').disabled = true;
+            
+            // Собрать данные
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                message: document.getElementById('message').value,
+                photo: document.getElementById('previewImage').src || null
+            };
+            
+            try {
+                // Отправить данные через WebApp
+                tg.sendData(JSON.stringify(formData));
+                
+                // Закрыть веб-приложение
+                tg.close();
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
+            } finally {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.querySelector('#participationForm .submit-btn').disabled = false;
+            }
+        }
+        
+        // Остальные функции остаются без изменений
+    </script>
+</body>
+</html>
